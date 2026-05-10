@@ -1,0 +1,26 @@
+{
+    "workbench.editorAssociations": {
+        "*.parquet": "duckdb.dataFileViewer",
+        "*.csv": "duckdb.dataFileViewer",
+        "*.tsv": "duckdb.dataFileViewer",
+        "*.xlsx": "duckdb.dataFileViewer"
+    },
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "DuckDB",
+            "name": "connect",
+            "group": "connect",
+            "database": "${workspaceFolder:retail-analytics-warehouse}/database/retail_warehouse.duckdb"
+        }
+    ],
+    "duckdb.databases": [
+        {
+            "alias": "retail_warehouse",
+            "type": "file",
+            "path": "e:\\serious_github\\retail-analytics-warehouse\\database\\retail_warehouse.duckdb",
+            "attached": false
+        }
+    ],
+    "duckdb.defaultDatabase": "retail_warehouse"
+}
