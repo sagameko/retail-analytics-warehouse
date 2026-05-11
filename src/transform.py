@@ -1,5 +1,8 @@
 from pathlib import Path
 import duckdb
+from src.logger import set_up_logger
+
+logger = set_up_logger()
 
 
 DATABASE_PATH = Path("database/retail_warehouse.duckdb")
@@ -154,7 +157,7 @@ def create_analytics_tables() -> None:
     """)
 
     conn.close()
-    print("Analytics tables created successfully.")
+    logger.info("Analytic tables created successfully!")
 
 
 if __name__ == "__main__":

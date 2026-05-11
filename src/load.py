@@ -6,34 +6,47 @@ import pandas as pd
 DATABASE_PATH = Path("database/retail_warehouse.duckdb")
 RAW_DATA_PATH = Path("data/raw/online-retail-dataset.csv")
 
-def load_raw_sales() -> None:
-    """
-    Load raw dataset into duck database
-    """
+from pathlib import Path
 
-    # check files existant
+import duckdb
+import pandas as pd
+
+from src.logger import set_up_logger
+
+
+logger = set_up_logger()
+
+DATABASE_PATH = Path("database/retail_warehouse.duckdb")
+RAW_DATA_PATH = Path("data/raw/online-retail-dataset.csv")
+
+
+def load_raw_sales() -> None:
+
+    logger.info("Starting raw sales load process.")
+
     if not RAW_DATA_PATH.exists():
+        logger.error(f"Missing file: {RAW_DATA_PATH}")
         raise FileNotFoundError(f"Could not find file: {RAW_DATA_PATH}")
-    
-    # Read csv  files
+
     df = pd.read_csv(RAW_DATA_PATH)
 
-    # Create database folder if not existed
+    logger.info(f"Loaded CSV with {len(df):,} rows.")
+
     DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    # Connect to database
     conn = duckdb.connect(str(DATABASE_PATH))
 
-    # Remove old table if there is any
     conn.execute("DROP TABLE IF EXISTS raw_sales")
 
-    # Create raw_sawl table 
-    conn.execute("CREATE TABLE raw_sales AS SELECT * FROM df")
+    conn.execute("""
+        CREATE TABLE raw_sales AS
+        SELECT *
+        FROM df
+    """)
 
-    # Close down the conenction
     conn.close()
 
-    print("Loaded sale data successfully!!!")
+    logger.info("Raw sales table created successfully.")
 
 if __name__ ==  "__main__":
     load_raw_sales()
