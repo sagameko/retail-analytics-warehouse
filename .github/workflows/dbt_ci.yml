@@ -40,7 +40,7 @@ jobs:
             outputs:
               dev:
                 type: duckdb
-                path: database/retail_warehouse.duckdb
+                path: ../../database/retail_warehouse.duckdb
                 threads: 4
           EOF
 
