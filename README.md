@@ -1,4 +1,4 @@
----
+
 
 ## dbt Integration
 
@@ -21,7 +21,7 @@ The project uses dbt with DuckDB to create:
 
 This architecture follows a modern ELT-style analytics engineering workflow.
 
----
+
 
 ## dbt Warehouse Models
 
