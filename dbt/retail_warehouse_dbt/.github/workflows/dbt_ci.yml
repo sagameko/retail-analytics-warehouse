@@ -1,0 +1,60 @@
+name: dbt CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dbt-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install dbt-duckdb
+
+      - name: Create dbt profiles directory
+        run: mkdir -p ~/.dbt
+
+      - name: Create dbt profile
+        run: |
+          echo "
+          retail_warehouse_dbt:
+            target: dev
+
+            outputs:
+              dev:
+                type: duckdb
+                path: database/retail_warehouse.duckdb
+                threads: 4
+          " > ~/.dbt/profiles.yml
+
+      - name: Run main pipeline
+        run: python main.py
+
+      - name: Run dbt models
+        working-directory: dbt/retail_warehouse_dbt
+        run: dbt run
+
+      - name: Run dbt tests
+        working-directory: dbt/retail_warehouse_dbt
+        run: dbt test
+
+      - name: Run Python data quality tests
+        run: python testing/test_data_quality.py
